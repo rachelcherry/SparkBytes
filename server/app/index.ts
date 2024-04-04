@@ -16,9 +16,8 @@ app.use(express.json());
 
 app.use('/api/', helloRouter);
 app.use('/api/user', userRouter);
-app.use('/api', helloRouter);
+app.use('/api/auth', authRouter);
 app.use('/api/events', eventsRouter);
 app.use('/api/tags', tagsRouter);
-app.use('/auth', authRouter)
 
 export default app;
