@@ -11,27 +11,35 @@ import {
 const Login = () => {
   const [loading, setLoading] = useState(false);
   const { updateAuthToken } = useAuth(); //getting the updateAuthToken from useAuth
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState(false);
 
   const login = async (token: string) => {
     updateAuthToken(token); //calls updateAuthToken function to update authentication token
   };
 
-  const handleLogin = async (values) => {
+  const handleLogin = async () => {
     setLoading(true);
     try {
-      const { email, password } = values;
+      //const { email, password } = values;
       //need to validate the email and password before moving forward, if either is not validated we send an error
       if (!validateEmail(email) || !validatePassword(password)) {
         message.error("Invalid email or password");
+        setError(true);
         setLoading(false);
+      } else {
+        setEmail(""); //reset the email to empty string
+        setPassword(""); //reset the password to empty string
+        setError(false);
       }
-
+      //create http request
       const response = await fetch("http://localhost:5005/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(values),
+        body: JSON.stringify({ email: email, password: password }),
       });
 
       const data = await response.json();
@@ -94,22 +102,46 @@ const Login = () => {
               { type: "email", message: "Invalid email format" },
             ]}
           >
-            <Input prefix={<UserOutlined />} placeholder="Email"></Input>
+            <label>Email</label>
+            <Input
+              prefix={<UserOutlined />}
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            ></Input>
           </Form.Item>
           <Form.Item
             name="password"
             rules={[{ required: true, message: "Please input your password" }]}
           >
+            <label>Password</label>
             <Input.Password
               prefix={<LockOutlined />}
               placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
             ></Input.Password>
           </Form.Item>
-          <Form.Item>
-            <Button type="primary" htmlType="submit" loading={loading}>
-              Login
-            </Button>
-          </Form.Item>
+
+          <Button
+            type="primary"
+            htmlType="submit"
+            loading={loading}
+            style={{
+              marginTop: "20px",
+              alignContent: "center",
+              backgroundColor: "#28a745",
+              textAlign: "center",
+              width: "200px",
+            }}
+          >
+            Login
+          </Button>
+          {error && <p className="error">Please enter valid information.</p>}
+
+          <a href="/" style={{ marginTop: "20px" }}>
+            Back to Home
+          </a>
         </Form>
       </div>
     </>
