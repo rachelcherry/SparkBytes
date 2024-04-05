@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Form, Input, Button, message } from "antd";
 import { useAuth } from "@/contexts/AuthContext";
-import { UserOutlined, LockOutlined } from "@ant-design/icons";
+import { UserOutlined, LockOutlined, HomeOutlined } from "@ant-design/icons";
 import {
   validateEmail,
   validatePassword,
@@ -94,7 +94,11 @@ const Login = () => {
         }}
       >
         <h1 style={{ alignContent: "center" }}>Login</h1>
-        <Form name="login" onFinish={handleLogin}>
+        <Form
+          name="login"
+          onFinish={handleLogin}
+          style={{ width: "100%", maxWidth: "300px" }}
+        >
           <Form.Item
             name="name"
             rules={[
@@ -102,25 +106,29 @@ const Login = () => {
               { type: "email", message: "Invalid email format" },
             ]}
           >
-            <label>Email</label>
-            <Input
-              prefix={<UserOutlined />}
-              placeholder="Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            ></Input>
+            <div>
+              <label>Email</label>
+              <Input
+                prefix={<UserOutlined />}
+                placeholder="Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              ></Input>
+            </div>
           </Form.Item>
           <Form.Item
             name="password"
             rules={[{ required: true, message: "Please input your password" }]}
           >
-            <label>Password</label>
-            <Input.Password
-              prefix={<LockOutlined />}
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            ></Input.Password>
+            <div>
+              <label>Password</label>
+              <Input.Password
+                prefix={<LockOutlined />}
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              ></Input.Password>
+            </div>
           </Form.Item>
 
           <Button
@@ -129,20 +137,22 @@ const Login = () => {
             loading={loading}
             style={{
               marginTop: "20px",
-              alignContent: "center",
               backgroundColor: "#28a745",
-              textAlign: "center",
-              width: "200px",
+              width: "300px",
             }}
           >
+            <HomeOutlined />
             Login
           </Button>
           {error && <p className="error">Please enter valid information.</p>}
-
-          <a href="/" style={{ marginTop: "20px" }}>
-            Back to Home
-          </a>
         </Form>
+
+        <a
+          href="/"
+          style={{ marginTop: "20px", color: "blue", textDecoration: "none" }}
+        >
+          Back to Home
+        </a>
       </div>
     </>
   );
