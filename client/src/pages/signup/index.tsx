@@ -15,32 +15,29 @@ import { Button, Input, Row, Col } from "antd";
 // name, email, password
 
 const Signup = () => {
-  const [username, setUsername] = useState(""); // state for the list that contains the users numbers
+  const [username, setUsername] = useState("");
   const [pass, setPass] = useState("");
   const [email, setEmail] = useState("");
   const [info, setInfo] = useState("");
-  const [error, setError] = useState(false); // state for keeping track of whether or not it is a valid input
+  const [error, setError] = useState(false);
   const handleSign = async () => {
     if (validateUsername(username)) {
-      // if the input length is 10 and it is a valid number
-      setUsername(""); // set the user input to be empty
-      setError(false); // set the error to be false because it is a valid number
+      setUsername("");
+      setError(false);
     } else {
-      setError(true); // there was no valid number given
+      setError(true);
     }
     if (validatePassword(pass)) {
-      // if the input length is 10 and it is a valid number
-      setPass(""); // set the user input to be empty
-      setError(false); // set the error to be false because it is a valid number
+      setPass("");
+      setError(false);
     } else {
-      setError(true); // there was no valid number given
+      setError(true);
     }
     if (validateEmail(email)) {
-      // if the input length is 10 and it is a valid number
-      setEmail(""); // set the user input to be empty
-      setError(false); // set the error to be false because it is a valid number
+      setEmail("");
+      setError(false);
     } else {
-      setError(true); // there was no valid number given
+      setError(true);
     }
 
     // create json with three of those and format
@@ -58,32 +55,80 @@ const Signup = () => {
     } else {
       console.error("Signup did not succeed.");
     }
-    // if response 200, go to login
-    // if response 400, _____
   };
   return (
     <>
-      <Input.Group>
-        <Input placeholder="Username" />
-        <Input placeholder="Email" />
-        <Input.Password placeholder="Password" />
-        <Button onClick={handleSign}>Sign Up!</Button>
-      </Input.Group>
-
-      {/* <div className="error">
-        {error && <p>Please enter a valid username.</p>}
-      </div> */}
-
-      {/* <div className="error">
-        {error && <p>Please enter a valid username.</p>}
+      <div
+        style={{
+          backgroundColor: "#f0f8ea",
+          minHeight: "100vh",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          padding: "20px",
+        }}
+      ></div>
+      <div
+        style={{
+          backgroundColor: "white",
+          width: "300px",
+          padding: "20px",
+          border: "1px solid #ccc",
+          borderRadius: "5px",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+        }}
+      >
+        <h1 style={{ textAlign: "center" }}>Sign Up</h1>
+        <label style={{ width: "100%", marginBottom: "10px" }}>
+          Username
+          <Input
+            placeholder="Username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+          />
+        </label>
+        <label style={{ width: "100%", marginBottom: "10px" }}>
+          Email
+          <Input
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+        </label>
+        <label style={{ width: "100%", marginBottom: "10px" }}>
+          Password
+          <Input.Password
+            placeholder="Password"
+            value={pass}
+            onChange={(e) => setPass(e.target.value)}
+          />
+        </label>
+        <Button
+          onClick={handleSign}
+          style={{
+            marginTop: "20px",
+            alignContent: "center",
+            backgroundColor: "#28a745",
+            textAlign: "center",
+            width: "200px",
+            // marginLeft: "100px",
+          }}
+        >
+          Sign Up
+        </Button>
+        {error && <p className="error">Please enter valid information.</p>}
+        <a href="/" style={{ marginTop: "20px" }}>
+          Back to Home
+        </a>
       </div>
-      <div className="error">
-        {error && <p>Please enter a valid username.</p>}
-      </div>
-      <button onClick={handleUsername}>Add</button>
-      <div className="error">
-        {error && <p>Please enter a valid username.</p>}
-      </div> */}
     </>
   );
 };
