@@ -90,6 +90,14 @@ export const signup = async (req: Request, res: Response) => {
   } else if (!validatePassword(password)) {
     res.status(400).json({ errorMessage: 'Password is invalid' });
   }
+
+  const userExist = await doesUserExist(email);
+  if (!userExist) {
+    const hashpw = await bcrypt.hash(password, 10);
+    await createUser(name, email, hashpw);
+  } else {
+    res.status(400).json({ errorMessage: 'User already exists' });
+  }
 };
 
 export const login = async (req: Request, res: Response) => {};
