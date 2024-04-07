@@ -43,7 +43,7 @@ const Signup = () => {
     // create json with three of those and format
 
     // create http request in typescript method, headers, body
-    const response = await fetch("http://localhost:5005/signup", {
+    const response = await fetch("http://localhost:5005/api/auth/signup", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -51,6 +51,8 @@ const Signup = () => {
       body: JSON.stringify({ name: username, email: email, password: pass }),
     });
     if (response.ok) {
+      // const data = await response.json();
+      // console.log("RESPONSE:", data.message);
       window.location.href = "../login/index";
     } else {
       console.error("Signup did not succeed.");

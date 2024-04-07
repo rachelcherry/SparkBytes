@@ -1,10 +1,9 @@
 import { Request, Response } from 'express';
 import prisma from '../prisma_client.ts';
-import jwt from 'jsonwebtoken';
+// import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
-import { env } from '../common/setupEnv.ts';
-//Delete this line once you use the function
-// @ts-ignore
+// import { env } from '../common/setupEnv.ts';
+
 async function doesUserExist(email: string): Promise<boolean> {
   /**
    * Check if user exists in the database
@@ -37,7 +36,6 @@ async function getUser(email: string) {
   return user;
 }
 
-//@ts-ignore
 async function createUser(name: string, email: string, password: string) {
   /**
    * Create user in the database
@@ -82,22 +80,30 @@ export const validateUsername = (username: string): boolean => {
 export const signup = async (req: Request, res: Response) => {
   const { name, email, password } = req.body;
   if (!name || !email || !password) {
-    res.status(400).json({ errorMessage: 'Missing input field' });
+    res.status(311).json({ errorMessage: 'Missing input field' });
+    return;
   } else if (!validateUsername(name)) {
-    res.status(400).json({ errorMessage: 'Username is invalid' });
+    res.status(312).json({ errorMessage: 'Username is invalid' });
+    return;
   } else if (!validateEmail(email)) {
-    res.status(400).json({ errorMessage: 'Email is invalid' });
+    res.status(314).json({ errorMessage: 'Email is invalid' });
+    return;
   } else if (!validatePassword(password)) {
-    res.status(400).json({ errorMessage: 'Password is invalid' });
+    res.status(315).json({ errorMessage: 'Password is invalid' });
+    return;
   }
+  console.log('valid inputs');
 
   const userExist = await doesUserExist(email);
-  if (!userExist) {
+  if (userExist == false) {
     const hashpw = await bcrypt.hash(password, 10);
     await createUser(name, email, hashpw);
+    console.log('user created');
+    res.send({ status: 200, message: `User created successfully: ${email}` });
   } else {
     res.status(400).json({ errorMessage: 'User already exists' });
+    console.log('user already exists');
   }
 };
 
-export const login = async (req: Request, res: Response) => {};
+// export const login = async (req: Request, res: Response) => {};
