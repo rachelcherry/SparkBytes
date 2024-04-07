@@ -56,6 +56,40 @@ async function createUser(name: string, email: string, password: string) {
   return newUser;
 }
 
-export const signup = async (req: Request, res: Response) => {};
+export const validateEmail = (email: string): boolean => {
+  // Email validation regex pattern
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  // Check if the email matches the regex pattern
+  return emailRegex.test(email);
+};
+
+export const validatePassword = (password: string): boolean => {
+  // Password validation logic
+  // Example: Password must be at least 8 characters long
+  // and contain at least 1 digit, 1 uppercase, and 1 lowercase character
+  const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
+  return passwordRegex.test(password);
+};
+
+export const validateUsername = (username: string): boolean => {
+  // Username validation logic
+  // Example: Username must be alphanumeric and between 3 to 20 characters long
+  const usernameRegex = /^[a-zA-Z0-9]{3,20}$/;
+  return usernameRegex.test(username);
+};
+
+export const signup = async (req: Request, res: Response) => {
+  const { name, email, password } = req.body;
+  if (!name || !email || !password) {
+    res.status(400).json({ errorMessage: 'Missing input field' });
+  } else if (!validateUsername(name)) {
+    res.status(400).json({ errorMessage: 'Username is invalid' });
+  } else if (!validateEmail(email)) {
+    res.status(400).json({ errorMessage: 'Email is invalid' });
+  } else if (!validatePassword(password)) {
+    res.status(400).json({ errorMessage: 'Password is invalid' });
+  }
+};
 
 export const login = async (req: Request, res: Response) => {};
