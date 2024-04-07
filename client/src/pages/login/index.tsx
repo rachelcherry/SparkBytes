@@ -34,7 +34,7 @@ const Login = () => {
         setError(false);
       }
       //create http request
-      const response = await fetch("http://localhost:5005/login", {
+      const response = await fetch("http://localhost:5005/api/auth/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
