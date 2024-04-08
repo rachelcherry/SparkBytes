@@ -43,13 +43,15 @@ const Login = () => {
       });
 
       const data = await response.json();
+      // console.log(data);
+      // alert(data); // uncomment to see data
 
-      if (response.ok) {
+      if (data.status == 200) {
         //we want to store the token into AuthToken if the login is successful
         login(data.token); //calls login function to store the token
         message.success("Login successful");
         //now that user has successfully logged in, we send them to the home page
-        window.location.href = "../login/index";
+        window.location.href = "../";
       } else {
         //displays an error message when there are invalid credentials
         message.error(data.message);
