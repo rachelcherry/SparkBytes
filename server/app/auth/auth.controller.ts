@@ -1,9 +1,9 @@
 import { Request, Response } from 'express';
 import prisma from '../prisma_client.ts';
-// import jwt from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import { env } from '../common/setupEnv.ts';
-import { request } from 'http';
+// import { request } from 'http';
 
 async function doesUserExist(email: string): Promise<boolean> {
   /**
@@ -107,5 +107,35 @@ export const signup = async (req: Request, res: Response) => {
 };
 
 export const login = async (req: Request, res: Response) => {
+  const { email, password } = req.body;
+  const userExists = await doesUserExist(email)
+  if(!userExists){
+    res.send({status: 400, message: 'Wrong username, no user exists with this email.'});
+    return;
+  }
+  //get user password
+  const user = await getUser(email)
+  
+  if(user == null) {
+    res.send({status: 500, message: "Internal Network Error"});
+    return;
+  }
+
+  const match = await bcrypt.compare(password, user.password || "");
+
+  if(!match){
+    res.send({status: 401, message: "Wrong password. Try again."});
+    return;
+  }
+  const token = jwt.sign(
+    { id: user.id, canPostEvents: user.canPostEvents, isAdmin: user.isAdmin},
+    env.JWT_TOKEN_SECRET,
+    {
+      expiresIn: "1h",
+    }
+  );
+  res.send({status: 200, jwt: token, message: `Successful login of user ${user.email}`})
+  console.log(`Successful user sign-in: ${user.password} = ${password}`)
+  return;
 
 };

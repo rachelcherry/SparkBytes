@@ -5,7 +5,7 @@ import express from 'express';
 import * as authController from './auth.controller.ts';
 const router = express.Router();
 
-// router.get('/login', authController.login);
+router.post('/login', authController.login);
 router.post('/signup', authController.signup);
 
 export default router;
