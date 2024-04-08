@@ -101,7 +101,7 @@ export const signup = async (req: Request, res: Response) => {
     console.log('user created');
     res.send({ status: 200, message: `User created successfully: ${email}` });
   } else {
-    res.status(400).json({ errorMessage: 'User already exists' });
+    res.status(409).json({ errorMessage: 'User already exists' });
     console.log('user already exists');
   }
 };

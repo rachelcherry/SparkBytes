@@ -6,7 +6,7 @@ import {
   validatePassword,
   validateUsername,
 } from "../../utility/validationUtils";
-import { Button, Input, Row, Col } from "antd";
+import { Form, message, Button, Input, Row, Col } from "antd";
 // check if user exists and if not then create them
 // three functions
 // jwt.sign need this to make it work
@@ -31,6 +31,9 @@ const Signup = () => {
       setPass("");
       setError(false);
     } else {
+      message.error(
+        "Password needs to contain at least 8 characters, one upper case letter, one lower case letter, and a number."
+      );
       setError(true);
     }
     if (validateEmail(email)) {
@@ -55,7 +58,13 @@ const Signup = () => {
       // console.log("RESPONSE:", data.message);
       window.location.href = "../login";
     } else {
-      console.error("Signup didn't succeed.");
+      if (response.status === 409) {
+        message.error("User already exists");
+        // Display a message to the user indicating that the user already exists
+      } else {
+        console.error("Signup didn't succeed.");
+        // Display a generic error message for other types of errors
+      }
     }
   };
   return (
@@ -88,46 +97,76 @@ const Signup = () => {
           transform: "translate(-50%, -50%)",
         }}
       >
-        <h1 style={{ textAlign: "center" }}>Sign Up</h1>
-        <label style={{ width: "100%", marginBottom: "10px" }}>
-          Username
-          <Input
-            placeholder="Username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-          />
-        </label>
-        <label style={{ width: "100%", marginBottom: "10px" }}>
-          Email
-          <Input
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </label>
-        <label style={{ width: "100%", marginBottom: "10px" }}>
-          Password
-          <Input.Password
-            placeholder="Password"
-            value={pass}
-            onChange={(e) => setPass(e.target.value)}
-          />
-        </label>
-        <Button
-          onClick={handleSign}
-          style={{
-            marginTop: "20px",
-            alignContent: "center",
-            backgroundColor: "#28a745",
-            textAlign: "center",
-            width: "200px",
-            // marginLeft: "100px",
-          }}
+        <h1 style={{ alignContent: "center" }}>Sign Up</h1>
+        <Form
+          name="signup"
+          onFinish={handleSign}
+          style={{ width: "100%", maxWidth: "300px" }}
         >
-          Sign Up
-        </Button>
-        {error && <p className="error">Please enter valid information.</p>}
-        <a href="/" style={{ marginTop: "20px" }}>
+          <Form.Item
+            name="name"
+            rules={[
+              { required: true, message: "Please input your name" },
+              { type: "string", message: "Invalid name format" },
+            ]}
+          >
+            <div>
+              <label>Name</label>
+              <Input
+                placeholder="Name"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+              />
+            </div>
+          </Form.Item>
+          <Form.Item
+            name="email"
+            rules={[
+              { required: true, message: "Please input your email" },
+              { type: "email", message: "Invalid email format" },
+            ]}
+          >
+            <div>
+              <label>Email</label>
+              <Input
+                placeholder="Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </div>
+          </Form.Item>
+          <Form.Item
+            name="password"
+            rules={[{ required: true, message: "Please input your password" }]}
+          >
+            <div>
+              <label>Password</label>
+              <Input.Password
+                placeholder="Password"
+                value={pass}
+                onChange={(e) => setPass(e.target.value)}
+              />
+            </div>
+          </Form.Item>
+
+          <Button
+            type="primary"
+            htmlType="submit"
+            style={{
+              marginTop: "20px",
+              backgroundColor: "#28a745",
+              width: "300px",
+            }}
+          >
+            Login
+          </Button>
+          {error && <p className="error">Please enter valid information.</p>}
+        </Form>
+
+        <a
+          href="/"
+          style={{ marginTop: "20px", color: "blue", textDecoration: "none" }}
+        >
           Back to Home
         </a>
       </div>
