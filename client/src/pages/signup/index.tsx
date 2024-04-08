@@ -1,5 +1,6 @@
 import React from "react";
 import { useState } from "react";
+import { UserOutlined } from "@ant-design/icons";
 
 import {
   validateEmail,
@@ -158,7 +159,8 @@ const Signup = () => {
               width: "300px",
             }}
           >
-            Login
+            <UserOutlined />
+            Sign Up
           </Button>
           {error && <p className="error">Please enter valid information.</p>}
         </Form>
