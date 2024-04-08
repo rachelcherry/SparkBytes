@@ -53,7 +53,7 @@ const Signup = () => {
     if (response.ok) {
       // const data = await response.json();
       // console.log("RESPONSE:", data.message);
-      window.location.href = "../login/index";
+      window.location.href = "../login";
     } else {
       console.error("Signup didn't succeed.");
     }
