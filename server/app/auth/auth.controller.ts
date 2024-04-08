@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import prisma from '../prisma_client.ts';
-import jwt from 'jsonwebtoken';
+// import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import { env } from '../common/setupEnv.ts';
 import { request } from 'http';
@@ -36,7 +36,6 @@ async function getUser(email: string) {
   return user;
 }
 
-//@ts-ignore
 async function createUser(name: string, email: string, password: string) {
   /**
    * Create user in the database
@@ -55,32 +54,56 @@ async function createUser(name: string, email: string, password: string) {
   return newUser;
 }
 
-export const signup = async (req: Request, res: Response) => {};
+export const validateEmail = (email: string): boolean => {
+  // Email validation regex pattern
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-export const login = async (req: Request, res: Response) => {
-  // check if user exists in the first place
-  if(await !doesUserExist(req.body.email)){throw new Error("No user exists")}
-
-  // get information from request
-  const email = req.body.email
-  const inputPassword = req.body.password
-  const user = await getUser(email)
-
-
-  const match = bcrypt.compare(inputPassword, user?.password || 'none')
-
-  if(!match){
-    throw new Error("Wrong password. Try again.")
-  }
-  //unix time + duration
-  var now = Date.now();
-
-  //added an hour
-  const payload = {email: email, exp: now+3600000, canPostEvents: user?.canPostEvents, isAdmin: user?.isAdmin}
-  const jwt_token = jwt.sign(payload, env.JWT_TOKEN_SECRET, { algorithm: 'HS256' });
-
-  res.send({'status':200, 'jwt':jwt_token});
-  return;
-
-
+  // Check if the email matches the regex pattern
+  return emailRegex.test(email);
 };
+
+export const validatePassword = (password: string): boolean => {
+  // Password validation logic
+  // Example: Password must be at least 8 characters long
+  // and contain at least 1 digit, 1 uppercase, and 1 lowercase character
+  const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
+  return passwordRegex.test(password);
+};
+
+export const validateUsername = (username: string): boolean => {
+  // Username validation logic
+  // Example: Username must be alphanumeric and between 3 to 20 characters long
+  const usernameRegex = /^[a-zA-Z0-9]{3,20}$/;
+  return usernameRegex.test(username);
+};
+
+export const signup = async (req: Request, res: Response) => {
+  const { name, email, password } = req.body;
+  if (!name || !email || !password) {
+    res.status(311).json({ errorMessage: 'Missing input field' });
+    return;
+  } else if (!validateUsername(name)) {
+    res.status(312).json({ errorMessage: 'Username is invalid' });
+    return;
+  } else if (!validateEmail(email)) {
+    res.status(314).json({ errorMessage: 'Email is invalid' });
+    return;
+  } else if (!validatePassword(password)) {
+    res.status(315).json({ errorMessage: 'Password is invalid' });
+    return;
+  }
+  console.log('valid inputs');
+
+  const userExist = await doesUserExist(email);
+  if (userExist == false) {
+    const hashpw = await bcrypt.hash(password, 10);
+    await createUser(name, email, hashpw);
+    console.log('user created');
+    res.send({ status: 200, message: `User created successfully: ${email}` });
+  } else {
+    res.status(400).json({ errorMessage: 'User already exists' });
+    console.log('user already exists');
+  }
+};
+
+// export const login = async (req: Request, res: Response) => {};
