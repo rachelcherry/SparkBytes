@@ -80,16 +80,16 @@ export const validateUsername = (username: string): boolean => {
 export const signup = async (req: Request, res: Response) => {
   const { name, email, password } = req.body;
   if (!name || !email || !password) {
-    res.status(311).json({ errorMessage: 'Missing input field' });
+    res.status(400).json({ errorMessage: 'Missing input field' });
     return;
   } else if (!validateUsername(name)) {
-    res.status(312).json({ errorMessage: 'Username is invalid' });
+    res.status(400).json({ errorMessage: 'Username is invalid' });
     return;
   } else if (!validateEmail(email)) {
-    res.status(314).json({ errorMessage: 'Email is invalid' });
+    res.status(400).json({ errorMessage: 'Email is invalid' });
     return;
   } else if (!validatePassword(password)) {
-    res.status(315).json({ errorMessage: 'Password is invalid' });
+    res.status(400).json({ errorMessage: 'Password is invalid' });
     return;
   }
   console.log('valid inputs');
@@ -106,4 +106,6 @@ export const signup = async (req: Request, res: Response) => {
   }
 };
 
-// export const login = async (req: Request, res: Response) => {};
+export const login = async (req: Request, res: Response) => {
+
+};
