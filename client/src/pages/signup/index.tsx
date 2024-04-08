@@ -55,7 +55,7 @@ const Signup = () => {
       // console.log("RESPONSE:", data.message);
       window.location.href = "../login/index";
     } else {
-      console.error("Signup did not succeed.");
+      console.error("Signup didn't succeed.");
     }
   };
   return (
