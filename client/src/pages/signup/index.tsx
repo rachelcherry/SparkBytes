@@ -1,6 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import { UserOutlined } from "@ant-design/icons";
+import { API_URL } from "../../common/constants";
 
 import {
   validateEmail,
@@ -47,7 +48,7 @@ const Signup = () => {
     // create json with three of those and format
 
     // create http request in typescript method, headers, body
-    const response = await fetch("http://localhost:5005/api/auth/signup", {
+    const response = await fetch(`${API_URL}/api/auth/signup`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
