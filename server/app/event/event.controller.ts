@@ -96,16 +96,26 @@ export const get_event_by_id = async (req: Request, res: Response) => {
   }
 };
 
-export const create_event = async (req: Request, res: Response) => {
-  const { exp_time, description, qty, tags, location } = req.body;
+export const create_event = async (req: Request, res: Response): Promise<void> => {
   try {
+    const { exp_time, description, qty, tags, location } = req.body;
     const userId = req.body.user.id;
     const now = new Date().toISOString();
-    const photoData = req.body.photos;
-    const photoBuffer = Buffer.from(photoData, 'base64');
-    const photoBase64 = photoBuffer.toString('base64'); // Convert Buffer to base64 string
-    console.log('Value of tags:', tags);
-    console.log(tags.connect);
+
+    const user = await prisma.user.findUnique({
+      where: {
+        id: userId
+      },
+      select: {
+        canPostEvents: true,
+      },
+    });
+
+    if (!user || !user.canPostEvents) {
+      res.status(403).json({ error: 'You do not have permission to create events' });
+      return; // Return early to avoid further execution
+    }
+
     const newEvent = await prisma.event.create({
       data: {
         post_time: now,
@@ -113,9 +123,8 @@ export const create_event = async (req: Request, res: Response) => {
         description,
         qty,
         done: false,
-
         tags: {
-          connect: tags.connect, // Use the 'connect' property directly
+          connect: tags, // Assuming tags is an array of tag IDs
         },
         createdBy: {
           connect: { id: userId },
@@ -130,11 +139,6 @@ export const create_event = async (req: Request, res: Response) => {
             loc_note: location.loc_note,
           },
         },
-        photos: {
-          create: {
-            photo: photoBase64,
-          },
-        },
       },
     });
 
@@ -144,6 +148,7 @@ export const create_event = async (req: Request, res: Response) => {
     res.status(500).json({ error: 'Server error' });
   }
 };
+
 
 export const edit_event = async (req: Request, res: Response) => {
   const { event_id } = req.params;
