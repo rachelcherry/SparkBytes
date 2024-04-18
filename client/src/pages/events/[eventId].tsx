@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { useRouter } from "next/router";
 import { API_URL } from "@/common/constants";
 import { IEvent } from "@/common/interfaces_zod";
 import { Card, Typography } from "antd";
+import { AuthContext } from "@/contexts/AuthContext";
 
 const { Title, Paragraph } = Typography;
 
@@ -15,11 +16,16 @@ const EventDetails = () => {
   //state variables for event information and loading state
   const [event, setEvent] = useState<IEvent | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const { authState } = useContext(AuthContext);
   //this function fetches the event information from the backend API
   useEffect(() => {
     const fetchEvent = async () => {
       try {
-        const response = await fetch(`${API_URL}/api/events/${eventId}`);
+        const response = await fetch(`${API_URL}/api/events/${eventId}`, {
+          headers: {
+            Authorization: `Bearer ${authState?.token}`,
+          },
+        });
         //this handles response errors
         if (!response.ok) {
           throw new Error("Failed to fetch event");
