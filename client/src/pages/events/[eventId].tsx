@@ -9,7 +9,9 @@ const { Title, Paragraph } = Typography;
 const EventDetails = () => {
   //get event_id from router
   const router = useRouter();
-  const { event_id } = router.query;
+  const { eventId } = router.query;
+  //debugging
+  console.log("event id", eventId);
   //state variables for event information and loading state
   const [event, setEvent] = useState<IEvent | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -17,7 +19,7 @@ const EventDetails = () => {
   useEffect(() => {
     const fetchEvent = async () => {
       try {
-        const response = await fetch(`${API_URL}/api/events/${event_id}`);
+        const response = await fetch(`${API_URL}/api/events/${eventId}`);
         //this handles response errors
         if (!response.ok) {
           throw new Error("Failed to fetch event");
@@ -32,13 +34,18 @@ const EventDetails = () => {
         setLoading(false);
       }
     };
+    //DEBUGGING
+    console.log("eventId: ", eventId);
     //this fetches event data when the event_id changes
-    if (event_id) {
-      fetchEvent;
+    if (eventId) {
+      fetchEvent();
     }
-  }, [event_id]);
+  }, [eventId]);
+  //DEBUGGING
+  console.log("event: ", event);
   //renders a loading message while fetching event data
   if (loading) {
+    console.log("loading event page");
     return <div>Loading...</div>;
   }
   //this renders an error message if event data is not found
