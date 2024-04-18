@@ -97,58 +97,53 @@ export const get_event_by_id = async (req: Request, res: Response) => {
 };
 
 export const create_event = async (req: Request, res: Response): Promise<void> => {
-  try {
-    const { exp_time, description, qty, tags, location } = req.body;
-    const userId = req.body.user.id;
-    const now = new Date().toISOString();
-
-    const user = await prisma.user.findUnique({
-      where: {
-        id: userId
-      },
-      select: {
-        canPostEvents: true,
-      },
-    });
-
-    if (!user || !user.canPostEvents) {
-      res.status(403).json({ error: 'You do not have permission to create events' });
-      return; // Return early to avoid further execution
-    }
-
-    const newEvent = await prisma.event.create({
-      data: {
-        post_time: now,
-        exp_time,
-        description,
-        qty,
-        done: false,
-        tags: {
-          connect: tags, // Assuming tags is an array of tag IDs
-        },
-        createdBy: {
-          connect: { id: userId },
-        },
-        createdAt: now,
-        updatedAt: now,
-        location: {
-          create: {
-            Address: location.Address,
-            floor: location.floor,
-            room: location.room,
-            loc_note: location.loc_note,
-          },
-        },
-      },
-    });
-
-    res.status(201).json(newEvent);
-  } catch (error) {
-    console.error('Error creating event:', error);
-    res.status(500).json({ error: 'Server error' });
-  }
-};
-
+    try {
+      const { exp_time, description, qty, tags } = req.body;
+      const userId = req.body.user.id;
+      const now = new Date().toISOString();
+  console.log("word")
+  console.log(tags)
+  
+      const user = await prisma.user.findUnique({
+        where: {
+          id: userId,
+        },
+        select: {
+          canPostEvents: true,
+        },
+      });
+  
+      if (!user || !user.canPostEvents) {
+        res.status(403).json({ error: 'You do not have permission to create events' });
+        return; // Return early to avoid further execution
+      }
+  
+      const newEvent = await prisma.event.create({
+        data: {
+          post_time: now,
+          description,
+          done: false,
+          tags: {
+            connect: tags, // Assuming tags is an array of tag IDs
+          },
+          createdBy: {
+            connect: { id: userId },
+          },
+          createdAt: now,
+          updatedAt: now,
+          exp_time: exp_time,
+          qty: qty,
+        },
+      });
+  
+      res.status(201).json(newEvent);
+    } catch (error) {
+      console.error('Error creating event:', error);
+      res.status(500).json({ error: 'Server error' });
+    }
+  };
+  
+    
 
 export const edit_event = async (req: Request, res: Response) => {
   const { event_id } = req.params;
