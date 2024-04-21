@@ -125,7 +125,7 @@ return;
         done: false,
 
         tags: {
-          connect: tags.connect, 
+          connect: tags.map((tag_id: number) => ({ tag_id })),
         },
         createdBy: {
           connect: { id: userId },
