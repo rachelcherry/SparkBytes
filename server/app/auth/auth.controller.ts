@@ -135,7 +135,7 @@ export const login = async (req: Request, res: Response) => {
     }
   );
   res.send({ status: 200, token: token, message: `Successful login of user ${user.email}` });
-  console.log(`Successful user sign-in: ${user.password} = ${password}`)
+  // console.log(`Successful user sign-in: ${user.password} = ${password}`)
   return;
 
 };
