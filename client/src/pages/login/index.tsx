@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Form, Input, Button, message } from "antd";
 import { useAuth } from "@/contexts/AuthContext";
+import { API_URL } from "@/common/constants";
 import { UserOutlined, LockOutlined, HomeOutlined } from "@ant-design/icons";
 import {
   validateEmail,
@@ -34,7 +35,7 @@ const Login = () => {
         setError(false);
       }
       //create http request
-      const response = await fetch("http://localhost:5005/api/auth/login", {
+      const response = await fetch(`${API_URL}/api/auth/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
