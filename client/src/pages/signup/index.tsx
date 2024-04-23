@@ -9,6 +9,7 @@ import {
   validateUsername,
 } from "../../utility/validationUtils";
 import { Form, message, Button, Input, Row, Col } from "antd";
+import Link from "next/link";
 // check if user exists and if not then create them
 // three functions
 // jwt.sign need this to make it work
@@ -166,12 +167,12 @@ const Signup = () => {
           {error && <p className="error">Please enter valid information.</p>}
         </Form>
 
-        <a
+        <Link
           href="/"
           style={{ marginTop: "20px", color: "blue", textDecoration: "none" }}
         >
           Back to Home
-        </a>
+        </Link>
       </div>
     </>
   );

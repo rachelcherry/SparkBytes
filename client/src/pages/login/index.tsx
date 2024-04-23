@@ -8,6 +8,7 @@ import {
   validatePassword,
   validateUsername,
 } from "@/utility/validationUtils";
+import Link from "next/link";
 
 const Login = () => {
   const [loading, setLoading] = useState(false);
@@ -150,12 +151,12 @@ const Login = () => {
           {error && <p className="error">Please enter valid information.</p>}
         </Form>
 
-        <a
+        <Link
           href="/"
           style={{ marginTop: "20px", color: "blue", textDecoration: "none" }}
         >
           Back to Home
-        </a>
+        </Link>
       </div>
     </>
   );
