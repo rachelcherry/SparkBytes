@@ -78,7 +78,6 @@ export const validateUsername = (username: string): boolean => {
 };
 
 export const signup = async (req: Request, res: Response) => {
-  res.send({ status: 200, message: `User created successfully:` });
   try {
     const { name, email, password } = req.body;
     if (!name || !email || !password) {
