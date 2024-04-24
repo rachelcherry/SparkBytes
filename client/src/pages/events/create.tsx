@@ -21,7 +21,12 @@ function CreateEvent() {
   const [tags, setTags] = useState<ITag[]>([]);
 
   const handleCreateEvent = async (values: any) => {
-    const { exp_time, description, qty, tags } = values;
+    let { exp_time, description, qty, tags } = values;
+
+    if (tags == undefined) {
+      tags = [];
+    }
+
     try {
       const response = await fetch(`${API_URL}/api/events/create`, {
         method: "POST",
@@ -81,12 +86,15 @@ function CreateEvent() {
         padding: "20px",
         width: "100%",
         height: "100%",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
       }}
     >
       <div
         style={{
           backgroundColor: "white",
-          width: "25%",
+          width: "75%",
           padding: "20px",
           border: "1px solid #ccc",
           borderRadius: "5px",
@@ -96,7 +104,7 @@ function CreateEvent() {
           justifyContent: "center",
           position: "absolute",
           top: "5%",
-          left: "40%",
+          left: "19%",
         }}
       >
         <h1 style={{ alignContent: "center", fontFamily: "Arial" }}>
@@ -104,8 +112,9 @@ function CreateEvent() {
         </h1>
         <Form
           title="Create Event"
-          style={{ width: "100%", maxWidth: "300px" }}
+          style={{ width: "100%" }}
           onFinish={handleCreateEvent}
+          layout="vertical"
         >
           <Form.Item
             label="Expiration Time"
@@ -113,24 +122,27 @@ function CreateEvent() {
             rules={[
               { required: true, message: "Please enter an expiration time" },
             ]}
+            style={{ width: "100%" }}
           >
             <DatePicker />
           </Form.Item>
           <Form.Item
             label="Description"
             name="description"
-            rules={[{ required: true, message: "Please enter a description!" }]}
+            rules={[{ required: true, message: "Please enter a description" }]}
+            style={{ width: "100%" }}
           >
-            <Input.TextArea rows={1} />
+            <Input.TextArea rows={4} />
           </Form.Item>
           <Form.Item
             label="Quantity"
             name="qty"
             rules={[{ required: true, message: "Please enter a quantity" }]}
+            style={{ width: "100%" }}
           >
             <InputNumber min={0} />
           </Form.Item>
-          <Form.Item label="Tags" name="tags">
+          <Form.Item label="Tags" name="tags" style={{ width: "100%" }}>
             <Select mode="multiple" allowClear>
               {tags.map((tag) => (
                 <Option key={tag.tag_id} value={tag.tag_id}>
@@ -140,8 +152,14 @@ function CreateEvent() {
               ))}
             </Select>
           </Form.Item>
-          <Form.Item style={{ textAlign: "center" }}>
-            <Button htmlType="submit">Create</Button>
+          <Form.Item style={{ textAlign: "center", width: "100%" }}>
+            <Button
+              htmlType="submit"
+              type="primary"
+              style={{ textAlign: "center", width: "100%" }}
+            >
+              Create
+            </Button>
           </Form.Item>
         </Form>
       </div>
