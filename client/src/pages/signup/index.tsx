@@ -59,7 +59,7 @@ const Signup = () => {
     if (response.ok) {
       // const data = await response.json();
       // console.log("RESPONSE:", data.message);
-      window.location.href = "../login";
+      window.location.href = "/login";
     } else {
       if (response.status === 409) {
         message.error("User already exists");
