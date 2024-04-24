@@ -63,7 +63,7 @@ const Events: FC = () => {
       }
     };
     fetchEvents();
-  }, [getAuthState]);
+  }, []);
 
   const handlePageChange = (page: number, pageSize?: number) => {
     setCurrentPage(page);
