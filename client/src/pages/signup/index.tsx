@@ -47,7 +47,7 @@ const Signup = () => {
     }
 
     // create json with three of those and format
-
+    console.log(`hitting ${API_URL}/api/auth/signup`, API_URL);
     // create http request in typescript method, headers, body
     const response = await fetch(`${API_URL}/api/auth/signup`, {
       method: "POST",
