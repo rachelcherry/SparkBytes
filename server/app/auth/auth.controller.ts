@@ -78,36 +78,31 @@ export const validateUsername = (username: string): boolean => {
 };
 
 export const signup = async (req: Request, res: Response) => {
-  try {
-    const { name, email, password } = req.body;
-    if (!name || !email || !password) {
-      res.status(400).json({ errorMessage: 'Missing input field' });
-      return;
-    } else if (!validateUsername(name)) {
-      res.status(400).json({ errorMessage: 'Username is invalid' });
-      return;
-    } else if (!validateEmail(email)) {
-      res.status(400).json({ errorMessage: 'Email is invalid' });
-      return;
-    } else if (!validatePassword(password)) {
-      res.status(400).json({ errorMessage: 'Password is invalid' });
-      return;
-    }
-    console.log('valid inputs');
-
-    const userExist = await doesUserExist(email);
-    if (userExist == false) {
-      const hashpw = await bcrypt.hash(password, 10);
-      await createUser(name, email, hashpw);
-      console.log('user created');
-      res.send({ status: 200, message: `User created successfully: ${email}` });
-    } else {
-      res.status(409).json({ errorMessage: 'User already exists' });
-      console.log('user already exists');
-    }
+  const { name, email, password } = req.body;
+  if (!name || !email || !password) {
+    res.status(400).json({ errorMessage: 'Missing input field' });
+    return;
+  } else if (!validateUsername(name)) {
+    res.status(400).json({ errorMessage: 'Username is invalid' });
+    return;
+  } else if (!validateEmail(email)) {
+    res.status(400).json({ errorMessage: 'Email is invalid' });
+    return;
+  } else if (!validatePassword(password)) {
+    res.status(400).json({ errorMessage: 'Password is invalid' });
+    return;
   }
-  catch (error) {
-    res.status(409).json({ errorMessage: error });
+  console.log('valid inputs');
+
+  const userExist = await doesUserExist(email);
+  if (userExist == false) {
+    const hashpw = await bcrypt.hash(password, 10);
+    await createUser(name, email, hashpw);
+    console.log('user created');
+    res.send({ status: 200, message: `User created successfully: ${email}` });
+  } else {
+    res.status(409).json({ errorMessage: 'User already exists' });
+    console.log('user already exists');
   }
 };
 
