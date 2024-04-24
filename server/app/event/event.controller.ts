@@ -101,21 +101,21 @@ export const create_event = async (req: Request, res: Response) => {
   try {
     const userId = req.body.user.id;
     const now = new Date().toISOString();
-    console.log('Value of tags:', tags);
-    console.log(tags.connect);
     const user = await prisma.user.findUnique({
-where: {
-id: userId,
-},
-   select: {
-           canPostEvents: true,
-},
-});
-      
-if (!user || !user.canPostEvents) {
-res.status(403).json({ error: 'You do not have permission to create events' });
-return; 
-}
+      where: {
+        id: userId,
+      },
+      select: {
+        canPostEvents: true,
+      },
+    });
+
+    if (!user || !user.canPostEvents) {
+      res.status(403).json({ error: 'You do not have permission to create events' });
+      return;
+    }
+    console.log('!!!');
+    console.log(tags);
     const newEvent = await prisma.event.create({
       data: {
         post_time: now,
