@@ -20,7 +20,6 @@ function SideMenu() {
   }, [pathname]);
 
   const signOut = async () => {
-    // Added async for error handling
     try {
       await clearAuthState();
       router.push("/");
@@ -53,11 +52,16 @@ function SideMenu() {
             Create Event
           </Menu.Item>
         )}
-        <Menu.Item key="signOut" icon={<LogoutOutlined />}>
-          Sign Out
-        </Menu.Item>
       </Menu>
+      <div style={{ marginTop: "auto" }}>
+        <Menu mode="vertical" onClick={signOut} selectedKeys={[]}>
+          <Menu.Item key="signOut" icon={<LogoutOutlined />}>
+            Sign Out
+          </Menu.Item>
+        </Menu>
+      </div>
     </div>
   );
 }
+
 export default SideMenu;
