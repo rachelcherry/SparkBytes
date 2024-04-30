@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import prisma from '../prisma_client.ts';
+import jwt from 'jsonwebtoken';
 
 export const get_events_for_user = async (req: Request, res: Response) => {
   const userId = req.body.user.id;
@@ -114,8 +115,7 @@ export const create_event = async (req: Request, res: Response) => {
       res.status(403).json({ error: 'You do not have permission to create events' });
       return;
     }
-    console.log('!!!');
-    console.log(tags);
+
     const newEvent = await prisma.event.create({
       data: {
         post_time: now,
@@ -123,7 +123,6 @@ export const create_event = async (req: Request, res: Response) => {
         description,
         qty,
         done: false,
-
         tags: {
           connect: tags.map((tag_id: number) => ({ tag_id })),
         },
@@ -135,12 +134,16 @@ export const create_event = async (req: Request, res: Response) => {
       },
     });
 
-    res.status(201).json(newEvent);
+    // Generate JWT token
+    const token = jwt.sign({ userId }, 'JWT_TOKEN_SECRET');
+
+    res.status(201).json({ newEvent, token }); 
   } catch (error) {
     console.error('Error creating event:', error);
     res.status(500).json({ error: 'Server error' });
   }
 };
+
 
 export const edit_event = async (req: Request, res: Response) => {
   const { event_id } = req.params;
