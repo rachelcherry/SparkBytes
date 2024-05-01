@@ -5,24 +5,28 @@ import {
   HomeOutlined,
   PlusOutlined,
 } from "@ant-design/icons";
-import { useRouter } from "next/router";
 import { Menu } from "antd";
+import { useRouter } from "next/router";
 import { useAuth } from "@/contexts/AuthContext";
 
 function SideMenu() {
   const router = useRouter();
   const pathname = router.pathname;
   const [selectedKeys, setSelectedKeys] = useState(pathname);
-
-  const { clearAuthState } = useAuth();
+  const { clearAuthState, getAuthState, authState } = useAuth();
 
   useEffect(() => {
     setSelectedKeys(pathname);
   }, [pathname]);
 
-  const signOut = () => {
-    clearAuthState();
-    router.push("/");
+  const signOut = async () => {
+    // Added async for error handling
+    try {
+      await clearAuthState();
+      router.push("/");
+    } catch (error) {
+      console.error("Error signing out:", error);
+    }
   };
 
   return (
@@ -37,40 +41,22 @@ function SideMenu() {
           }
         }}
         selectedKeys={[selectedKeys]}
-        items={[
-          {
-            label: "Example Protected Route",
-            key: "/protected",
-            icon: <HomeOutlined />,
-          },
-          {
-            label: "Events",
-            key: "/events",
-            icon: <CalendarOutlined />,
-          },
-          {
-            label: "Create Event",
-            key: "/events/create",
-            icon: <PlusOutlined />,
-          },
-        ]}
-      ></Menu>
-      <Menu
-        mode="vertical"
-        onClick={(item) => {
-          if (item.key === "signOut") {
-            signOut();
-          }
-        }}
-        selectedKeys={[selectedKeys]}
-        items={[
-          {
-            label: "Sign Out",
-            key: "signOut",
-            icon: <LogoutOutlined />,
-          },
-        ]}
-      ></Menu>
+      >
+        <Menu.Item key="/protected" icon={<HomeOutlined />}>
+          Example Protected Route
+        </Menu.Item>
+        <Menu.Item key="/events" icon={<CalendarOutlined />}>
+          Events
+        </Menu.Item>
+        {authState?.decodedToken?.id && (
+          <Menu.Item key="/events/create" icon={<PlusOutlined />}>
+            Create Event
+          </Menu.Item>
+        )}
+        <Menu.Item key="signOut" icon={<LogoutOutlined />}>
+          Sign Out
+        </Menu.Item>
+      </Menu>
     </div>
   );
 }
