@@ -20,6 +20,10 @@ function SideMenu() {
   }, [pathname]);
 
   const signOut = async () => {
+<<<<<<< HEAD
+=======
+    // Added async for error handling
+>>>>>>> 042c095a0bd9eeb5301994014da20d0711b7f876
     try {
       await clearAuthState();
       router.push("/");
@@ -47,11 +51,16 @@ function SideMenu() {
         <Menu.Item key="/events" icon={<CalendarOutlined />}>
           Events
         </Menu.Item>
+<<<<<<< HEAD
         {authState?.decodedToken?.canPostEvents && (
+=======
+        {authState?.decodedToken?.id && (
+>>>>>>> 042c095a0bd9eeb5301994014da20d0711b7f876
           <Menu.Item key="/events/create" icon={<PlusOutlined />}>
             Create Event
           </Menu.Item>
         )}
+<<<<<<< HEAD
       </Menu>
       <div style={{ marginTop: "auto" }}>
         <Menu mode="vertical" onClick={signOut} selectedKeys={[]}>
@@ -65,3 +74,13 @@ function SideMenu() {
 }
 
 export default SideMenu;
+=======
+        <Menu.Item key="signOut" icon={<LogoutOutlined />}>
+          Sign Out
+        </Menu.Item>
+      </Menu>
+    </div>
+  );
+}
+export default SideMenu;
+>>>>>>> 042c095a0bd9eeb5301994014da20d0711b7f876
