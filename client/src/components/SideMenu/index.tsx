@@ -48,11 +48,23 @@ function SideMenu() {
         <Menu.Item key="/events" icon={<CalendarOutlined />}>
           Events
         </Menu.Item>
-        {authState?.decodedToken?.id && (
+        {authState?.decodedToken?.canPostEvents && (
           <Menu.Item key="/events/create" icon={<PlusOutlined />}>
             Create Event
           </Menu.Item>
         )}
+      </Menu>
+      <Menu
+        mode="vertical"
+        onClick={(item) => {
+          if (item.key === "signOut") {
+            signOut();
+          } else {
+            router.push(item.key);
+          }
+        }}
+        selectedKeys={[selectedKeys]}
+      >
         <Menu.Item key="signOut" icon={<LogoutOutlined />}>
           Sign Out
         </Menu.Item>
