@@ -115,14 +115,6 @@ export const create_event = async (req: Request, res: Response) => {
       res.status(403).json({ error: 'You do not have permission to create events' });
       return;
     }
-<<<<<<< HEAD
-
-=======
-    console.log('!!!');
-    console.log(tags);
-    console.log('!!!');
-    console.log(location);
->>>>>>> 042c095a0bd9eeb5301994014da20d0711b7f876
     const newEvent = await prisma.event.create({
       data: {
         post_time: now,
