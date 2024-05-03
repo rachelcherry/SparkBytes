@@ -130,10 +130,14 @@ const EventDetails = () => {
           Expire Time: {dayjs(event.exp_time).format("YYYY-MM-DD HH:mm")}
         </Paragraph>
         <Paragraph style={{ color: "black", lineHeight: "3" }}>
-          {/* Created by: {event.createdBy.name} <br /> */}
+          {/*Created by: {event.createdById} <br />*/}
           Description: {event.description} <br />
           Quantity: {event.qty} <br />
-          Tags: {event.tags?.length !== 0 ? event.tags?.map(tag => tag.name).join(", ") : "Not Specified"} <br />
+          Tags:{" "}
+          {event.tags?.length !== 0
+            ? event.tags?.map((tag) => tag.name).join(", ")
+            : "Not Specified"}{" "}
+          <br />
           {/* Tags:{" "}
           {event.tags && event.tags.length > 0
             ? event.tags.map((tag, index) => (
@@ -144,10 +148,10 @@ const EventDetails = () => {
               ))
             : " Not specified"} */}
           {/* <br /> */}
-          {/* Location:{" "} */}
-          {/* {event.location
+          Location:{" "}
+          {event.location
             ? `${event.location.Address}, Floor ${event.location.floor}, Room ${event.location.room}`
-            : "Not specified"} */}
+            : "Not specified"}
         </Paragraph>
       </Card>
     </div>
