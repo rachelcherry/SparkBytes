@@ -190,6 +190,7 @@ const Events: FC = () => {
                 borderRadius: "0.625rem",
                 boxShadow: "0 2px 6px rgba(0, 0, 0, 0.1)",
               }}
+              // implementing thumbnail here using Antd Card featuer cover
               cover={
                 event.photos && event.photos.length > 0 ? (
                   <img alt="example" src={event.photos[0].photo} />
