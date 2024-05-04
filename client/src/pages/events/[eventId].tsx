@@ -98,7 +98,6 @@ const EventDetails = () => {
       >
         {event.photos && event.photos?.length > 0 && (
           <div style={{ marginBottom: "20px" }}>
-            <Typography.Title level={4}>Photos</Typography.Title>
             <div style={{ display: "flex", flexWrap: "wrap" }}>
               {event.photos?.map((photo: IPhoto) => (
                 <div
