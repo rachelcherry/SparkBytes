@@ -1,7 +1,7 @@
 import { useEffect, useState, useContext } from "react";
 import { useRouter } from "next/router";
 import { API_URL } from "@/common/constants";
-import { IEvent } from "@/common/interfaces_zod";
+import { IEvent, IPhoto } from "@/common/interfaces_zod";
 import {
   List,
   Card,
@@ -96,6 +96,25 @@ const EventDetails = () => {
           boxShadow: "0 2px 6px rgba(0, 0, 0, 0.1)",
         }}
       >
+        {event.photos && event.photos?.length > 0 && (
+          <div style={{ marginBottom: "20px" }}>
+            <Typography.Title level={4}>Photos</Typography.Title>
+            <div style={{ display: "flex", flexWrap: "wrap" }}>
+              {event.photos?.map((photo: IPhoto) => (
+                <div
+                  key={photo.id}
+                  style={{ marginRight: "10px", marginBottom: "10px" }}
+                >
+                  <img
+                    src={"data:image/png;base64," + photo.photo}
+                    alt={`Photo ${photo.id}`}
+                    style={{ maxWidth: "200px" }}
+                  ></img>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
         {event.createdById == authState?.decodedToken?.id && (
           <div
             style={{
