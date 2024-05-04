@@ -105,7 +105,8 @@ function CreateEvent() {
       if (response.ok) {
         message.success("Event Successfully Created");
         router.push("/events");
-        console.log(response);
+        const data = await response.json();
+        console.log(data);
       } else {
         if (response.status === 409) {
           message.error("Event not Successfully Created");
