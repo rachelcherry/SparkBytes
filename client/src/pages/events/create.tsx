@@ -12,6 +12,9 @@ import {
 import { API_URL } from "../../common/constants";
 import { AuthContext } from "@/contexts/AuthContext";
 import { ITag, ILocation } from "@/common/interfaces";
+import { UploadOutlined } from "@ant-design/icons";
+import { UploadChangeParam, UploadFile } from "antd/lib/upload/interface";
+import { Upload } from "antd";
 
 const { Option } = Select;
 
@@ -21,7 +24,33 @@ function CreateEvent() {
   const [tags, setTags] = useState<ITag[]>([]);
   const [locations, setLocations] = useState<ILocation[]>([]);
   const [showCreateLocation, setShowCreateLocation] = useState(false);
+  const [fileList, setFileList] = useState<UploadFile[]>([]);
 
+  const convertToBase64 = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const fileReader = new FileReader();
+      fileReader.readAsDataURL(file);
+      fileReader.onload = () => {
+        const result = fileReader.result;
+        if (typeof result === "string" && result.startsWith("data:")) {
+          resolve(result.split(",")[1]);
+        } else {
+          reject(new Error("Invalid file format or empty result"));
+        }
+      };
+      fileReader.onerror = (error) => {
+        reject(error);
+      };
+    });
+  };
+
+  const handleChange = async (info: any) => {
+    let newFileList: any[] = [...info.fileList];
+
+    newFileList = newFileList.slice(-10);
+    setFileList(newFileList);
+    console.log(newFileList);
+  };
   const handleCreateEvent = async (values: any) => {
     let {
       exp_time,
@@ -34,8 +63,10 @@ function CreateEvent() {
       location_note,
       locationID,
     } = values;
-    console.log("!!!");
-    console.log(location);
+
+    const myImages = await Promise.all(
+      fileList.map((file) => convertToBase64(file.originFileObj as File))
+    );
     if (tags == undefined) {
       tags = [];
     }
@@ -67,6 +98,7 @@ function CreateEvent() {
             room: location_room,
             loc_note: location_note,
           },
+          photos: myImages,
         }),
       });
 
@@ -199,6 +231,18 @@ function CreateEvent() {
             style={{ width: "100%" }}
           >
             <InputNumber min={0} />
+          </Form.Item>
+          <Form.Item>
+            <Upload
+              listType="picture-card"
+              beforeUpload={() => false}
+              onChange={handleChange}
+              multiple={true}
+            >
+              {fileList.length < 10 && (
+                <Button icon={<UploadOutlined />}>Upload</Button>
+              )}
+            </Upload>
           </Form.Item>
           <Form.Item label="Tags" name="tags" style={{ width: "100%" }}>
             <Select mode="multiple" allowClear>
