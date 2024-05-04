@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import prisma from '../prisma_client.ts';
 import jwt from 'jsonwebtoken';
 
+
 export const get_events_for_user = async (req: Request, res: Response) => {
   const userId = req.body.user.id;
   try {
@@ -98,7 +99,7 @@ export const get_event_by_id = async (req: Request, res: Response) => {
 };
 
 export const create_event = async (req: Request, res: Response) => {
-  const { exp_time, description, qty, tags, location } = req.body;
+  const { exp_time, description, qty, tags, location, photos } = req.body;
   try {
     const userId = req.body.user.id;
     const now = new Date().toISOString();
@@ -138,13 +139,14 @@ export const create_event = async (req: Request, res: Response) => {
             loc_note: location.loc_note,
           },
         },
+        photos: { create: photos.map((photo) => ({ photo })) },
       },
     });
 
     // Generate JWT token
     const token = jwt.sign({ userId }, 'JWT_TOKEN_SECRET');
 
-    res.status(201).json({ newEvent, token }); 
+    res.status(201).json({ newEvent, token });
   } catch (error) {
     console.error('Error creating event:', error);
     res.status(500).json({ error: 'Server error' });

@@ -49,7 +49,6 @@ function CreateEvent() {
 
     newFileList = newFileList.slice(-10);
     setFileList(newFileList);
-    console.log(newFileList);
   };
   const handleCreateEvent = async (values: any) => {
     let {
@@ -106,7 +105,7 @@ function CreateEvent() {
         message.success("Event Successfully Created");
         router.push("/events");
         const data = await response.json();
-        console.log(data);
+        // console.log(data);
       } else {
         if (response.status === 409) {
           message.error("Event not Successfully Created");
