@@ -92,17 +92,17 @@ export const signup = async (req: Request, res: Response) => {
     res.status(400).json({ errorMessage: 'Password is invalid' });
     return;
   }
-  console.log('valid inputs');
+  //('valid inputs');
 
   const userExist = await doesUserExist(email);
   if (userExist == false) {
     const hashpw = await bcrypt.hash(password, 10);
     await createUser(name, email, hashpw);
-    console.log('user created');
+    //console.log('user created');
     res.send({ status: 200, message: `User created successfully: ${email}` });
   } else {
     res.status(409).json({ errorMessage: 'User already exists' });
-    console.log('user already exists');
+    //console.log('user already exists');
   }
 };
 

@@ -25,7 +25,7 @@ const EventDetails = () => {
   const router = useRouter();
   const { eventId } = router.query;
   //debugging
-  console.log("event id", eventId);
+  //console.log("event id", eventId);
   //state variables for event information and loading state
   const [event, setEvent] = useState<IEvent | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -54,17 +54,17 @@ const EventDetails = () => {
       }
     };
     //DEBUGGING
-    console.log("eventId: ", eventId);
+    //("eventId: ", eventId);
     //this fetches event data when the event_id changes
     if (eventId) {
       fetchEvent();
     }
   }, [eventId]);
   //DEBUGGING
-  console.log("event: ", event);
+  //("event: ", event);
   //renders a loading message while fetching event data
   if (loading) {
-    console.log("loading event page");
+    //("loading event page");
     return <div>Loading...</div>;
   }
   //this renders an error message if event data is not found
