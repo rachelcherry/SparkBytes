@@ -17,7 +17,6 @@ import { FilterOutlined, UserOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
 import { useAuth } from "@/contexts/AuthContext";
 import { useFetch } from "@/utility/useFetch";
-import { IPhoto } from "@/common/interfaces_zod";
 const { Paragraph } = Typography;
 const { Option } = Select;
 
@@ -84,7 +83,6 @@ const Events: FC = () => {
         return dayjs(a.exp_time).valueOf() - dayjs(b.exp_time).valueOf();
       }
     });
-
     return filteredEvents.slice(startIndex, endIndex);
   };
 
@@ -173,7 +171,6 @@ const Events: FC = () => {
         loading={isLoading}
         renderItem={(event: IEvent) => (
           <List.Item>
-            <EventCard event={event} handleEventClick={handleEventClick} />
             <Card
               onClick={() => handleEventClick(event)}
               title={`Event ID: ${event.event_id}`}
