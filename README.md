@@ -21,7 +21,7 @@ Run `docker compose up` to start the database. This will create a container runn
 Next, we need to run a database migration tool to setup the database tables. In a new terminal window, run `npx prisma migrate deploy`.
 You should see that all schemas have successfully been applied. 
 
-_NOTE_: The database has to be running for migration to be successful.
+_NOTE_: The database has to be running for migration to be successful. Please ensure you run npx primsa generate.
 
 Then, run `npm run dev` to start the Express backend server. The server will connect to the database we've launched and configured.
 
