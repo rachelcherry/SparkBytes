@@ -192,25 +192,8 @@ const Events: FC = () => {
                 ) : null
               }
             >
-              {/* {event.photos && event.photos?.length > 0 && (
-                <div style={{ marginBottom: "20px" }}>
-                  <Typography.Title level={4}>Photos</Typography.Title>
-                  <div style={{ display: "flex", flexWrap: "wrap" }}>
-                    {event.photos?.map((photo: IPhoto) => (
-                      <div
-                        key={photo.id}
-                        style={{ marginRight: "10px", marginBottom: "10px" }}
-                      >
-                        <img
-                          src={"data:image/png;base64," + photo.photo}
-                          alt={`Photo ${photo.id}`}
-                          style={{ maxWidth: "50px" }}
-                        ></img>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )} */}
+
+
               {event.createdById == authState?.decodedToken?.id && (
                 <div
                   style={{
