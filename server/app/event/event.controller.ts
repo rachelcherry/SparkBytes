@@ -59,7 +59,15 @@ export const get_active_events = async (_: Request, res: Response) => {
         photos: true
       },
     });
-    return res.json({ events: activeEvents });
+    
+    let eventsWithOnePhoto = activeEvents.map(event => {
+      return {
+        ...event,
+        photos: event.photos.slice(0,1)
+      }
+    })
+
+    return res.json({ events: eventsWithOnePhoto });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: 'Server error' });
